@@ -1,4 +1,6 @@
-def get_chatbot_response(client,model_name,messages,temperature=0):
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
+def get_chatbot_response(client, model_name, messages, temperature=0):
     input_messages = []
     for message in messages:
         input_messages.append({"role": message["role"], "content": message["content"]})
@@ -13,26 +15,20 @@ def get_chatbot_response(client,model_name,messages,temperature=0):
     
     return response
 
-def get_embedding(embedding_client,model_name,text_input):
-    output = embedding_client.embeddings.create(input = text_input,model=model_name)
-    
-    embedings = []
-    for embedding_object in output.data:
-        embedings.append(embedding_object.embedding)
+def get_embedding(embedding_client, text_input):
+    return embedding_client.embed_documents([text_input])
 
-    return embedings
+def double_check_json_output(client, model_name, json_string):
+    prompt = f"""You will check this JSON string and correct any mistakes that will make it invalid. Then you will return the corrected JSON string. Nothing else. 
+    If the JSON is correct, just return it.
 
-def double_check_json_output(client,model_name,json_string):
-    prompt = f""" You will check this json string and correct any mistakes that will make it invalid. Then you will return the corrected json string. Nothing else. 
-    If the Json is correct just return it.
-
-    Do NOT return a single letter outside of the json string.
+    Do NOT return a single letter outside of the JSON string.
 
     {json_string}
     """
 
     messages = [{"role": "user", "content": prompt}]
 
-    response = get_chatbot_response(client,model_name,messages)
+    response = get_chatbot_response(client, model_name, messages)
 
     return response

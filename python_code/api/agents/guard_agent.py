@@ -1,16 +1,15 @@
 from dotenv import load_dotenv
 import os
 import json
+from groq import Groq
 from copy import deepcopy
 from .utils import get_chatbot_response
-from openai import OpenAI
 load_dotenv()
 
 class GuardAgent():
     def __init__(self):
-        self.client = OpenAI(
-            api_key=os.getenv("RUNPOD_TOKEN"),
-            base_url=os.getenv("RUNPOD_CHATBOT_URL"),
+        self.client = Groq(
+            api_key=os.getenv("GROQ_API_KEY"),
         )
         self.model_name = os.getenv("MODEL_NAME")
     

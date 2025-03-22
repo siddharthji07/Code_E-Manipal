@@ -1,7 +1,7 @@
 import os
 import json
 from .utils import get_chatbot_response,double_check_json_output
-from openai import OpenAI
+from groq import Groq
 from copy import deepcopy
 from dotenv import load_dotenv
 load_dotenv()
@@ -9,9 +9,8 @@ load_dotenv()
 
 class OrderTakingAgent():
     def __init__(self, recommendation_agent):
-        self.client = OpenAI(
-            api_key=os.getenv("RUNPOD_TOKEN"),
-            base_url=os.getenv("RUNPOD_CHATBOT_URL"),
+        self.client = Groq(
+            api_key=os.getenv("GROQ_API_KEY"),
         )
         self.model_name = os.getenv("MODEL_NAME")
 

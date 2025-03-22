@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import os
 from .utils import get_chatbot_response
-from openai import OpenAI
+from groq import Groq
 from copy import deepcopy
 from dotenv import load_dotenv
 load_dotenv()
@@ -10,9 +10,8 @@ load_dotenv()
 
 class RecommendationAgent():
     def __init__(self,apriori_recommendation_path,popular_recommendation_path):
-        self.client = OpenAI(
-            api_key=os.getenv("RUNPOD_TOKEN"),
-            base_url=os.getenv("RUNPOD_CHATBOT_URL"),
+        self.client = Groq(
+            api_key=os.getenv("GROQ_API_KEY"),
         )
         self.model_name = os.getenv("MODEL_NAME")
 

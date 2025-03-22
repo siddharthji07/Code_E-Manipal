@@ -4,19 +4,18 @@ import { API_KEY, API_URL } from '@/config/runpodConfigs';
 
 async function callChatBotAPI(messages: MessageInterface[]): Promise<MessageInterface> {
     try {
-        const response = await axios.post(API_URL, {
-            input: { messages }
-        }, {
+        // FastAPI endpoint for chat
+        const endpoint = `${API_URL}/chat`;
+        
+        const response = await axios.post(endpoint, messages, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
+                ...(API_KEY && { 'Authorization': `Bearer ${API_KEY}` })
             }
         });
         
-        let output = response.data;
-        let outputMessage: MessageInterface = output['output'];
-
-        return outputMessage;
+        // FastAPI returns the response directly
+        return response.data;
     } catch (error) {
         console.error('Error calling the API:', error);
         throw error;
